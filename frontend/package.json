@@ -5,10 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 5174",
-    "start": "vite --host 0.0.0.0 --port 5174",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview --host 0.0.0.0 --port 5174"
+    "lint": "eslint ."
   },
   "dependencies": {
     "react": "^19.1.0",
@@ -22,7 +20,6 @@
     "eslint": "^9.29.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
-    "globals": "^16.2.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.34.1",
     "vite": "^5.0.0"

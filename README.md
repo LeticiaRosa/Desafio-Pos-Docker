@@ -10,7 +10,7 @@ A aplicação é composta por três componentes principais:
 
 - **Banco de Dados**: PostgreSQL para persistência de dados
 - **API Backend**: Node.js/Express para lógica de negócio e endpoints REST
-- **Frontend Web**: React/Vue.js para interface do usuário
+- **Frontend Web**: React com TypeScript e Vite para interface do usuário
 
 Todos os componentes se comunicam através de uma rede Docker personalizada, garantindo isolamento e segurança.
 
@@ -19,8 +19,11 @@ Todos os componentes se comunicam através de uma rede Docker personalizada, gar
 - **Docker & Docker Compose**: Containerização e orquestração
 - **PostgreSQL**: Sistema de gerenciamento de banco de dados
 - **Node.js/Express**: Runtime e framework para o backend
-- **React/Vue.js**: Framework frontend
-- **Nginx**: Servidor web para servir arquivos estáticos (opcional)
+- **React com TypeScript**: Framework frontend com tipagem estática
+- **Vite**: Build tool e dev server para o frontend
+- **CORS**: Middleware para controle de acesso entre origens
+- **ESLint**: Linter para qualidade de código
+- **pg**: Driver PostgreSQL para Node.js
 
 ## 📁 Estrutura do Projeto
 
@@ -30,15 +33,21 @@ Desafio-Pos-Docker/
 ├── backend/
 │   ├── Dockerfile
 │   ├── package.json
-│   ├── src/
-│   │   └── index.js
-│   └── wait-for-it.sh
+│   └── src/
+│       └── index.js
 ├── frontend/
 │   ├── Dockerfile
+│   ├── Dockerfile.dev
 │   ├── package.json
+│   ├── vite.config.ts
+│   ├── tsconfig.json
+│   ├── eslint.config.js
+│   ├── index.html
 │   └── src/
-├── database/
-│   └── init.sql
+│       ├── App.tsx
+│       ├── main.tsx
+│       ├── global.css
+│       └── vite-env.d.ts
 └── README.md
 ```
 
@@ -61,30 +70,30 @@ cd Desafio-Pos-Docker
 2. Execute o comando para subir todos os serviços:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 3. Aguarde todos os containers estarem prontos. Você pode acompanhar os logs:
 
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 4. Acesse a aplicação:
-   - Frontend: http://localhost:5173
+   - Frontend: http://localhost:5174
    - API Backend: http://localhost:3000
-   - Banco de dados: localhost:5432
+   - Banco de dados: localhost:5432 (user: admin, password: admin, database: minhaapi)
 
 ### Parando a aplicação
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 Para remover também os volumes:
 
 ```bash
-docker-compose down -v
+docker compose down -v
 ```
 
 ## 🔄 Comunicação entre Serviços
@@ -122,52 +131,10 @@ curl http://localhost:3000/api/users
 3. **Logs dos containers**:
 
 ```bash
-docker-compose logs backend
-docker-compose logs frontend
-docker-compose logs db
+docker compose logs backend
+docker compose logs frontend
+docker compose logs db
 ```
-
-## 🛠️ Troubleshooting
-
-### Erro: "Cannot find module '/app/src/index.js'"
-
-Este erro indica que o arquivo principal do backend não está sendo encontrado. Verifique:
-
-1. **Estrutura do backend**:
-
-```bash
-# Verifique se existe o arquivo
-ls -la backend/src/index.js
-```
-
-2. **Dockerfile do backend** deve conter:
-
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-EXPOSE 3000
-CMD ["node", "src/index.js"]
-```
-
-3. **Package.json do backend** deve ter:
-
-```json
-{
-  "main": "src/index.js",
-  "scripts": {
-    "start": "node src/index.js"
-  }
-}
-```
-
-### Outros erros comuns:
-
-- **Permissão negada**: Execute `sudo docker-compose up`
-- **Porta em uso**: Mude as portas no docker-compose.yml
-- **Build falha**: Execute `docker-compose build --no-cache`
 
 ## 📝 Funcionalidades Implementadas
 
@@ -185,14 +152,19 @@ Para desenvolvimento local, você pode executar apenas serviços específicos:
 
 ```bash
 # Apenas o banco de dados
-docker-compose up db
+docker compose up db
 
 # Backend + Database
-docker-compose up backend db
+docker compose up backend db
 
-# Todos os serviços em modo de desenvolvimento
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+# Frontend isolado (para desenvolvimento com hot reload)
+docker compose up frontend
+
+# Todos os serviços
+docker compose up -d
 ```
+
+O frontend está configurado com `Dockerfile.dev` que inclui hot reload e volumes para desenvolvimento em tempo real.
 
 ## 📚 Recursos de Aprendizado
 

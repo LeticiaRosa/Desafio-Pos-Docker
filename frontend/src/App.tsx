@@ -57,27 +57,19 @@ export default function App() {
   };
 
   return (
-    <div style={{ padding: "40px", fontFamily: "Arial, sans-serif" }}>
+    <div>
       <h1>🐳 Desafio Pós-Graduação Docker - FIAP</h1>
       <h2>Frontend React + Backend Node.js + PostgreSQL</h2>
+      <h4>📊 Status da Aplicação:</h4>
       <div style={{ paddingLeft: "40px" }}>
-        <h4>📊 Status da Aplicação:</h4>
         <p>✅ Frontend React rodando na porta 5174</p>
         <p>✅ Backend Node.js rodando na porta 3000</p>
         <p>✅ PostgreSQL rodando na porta 5432</p>
         <p>✅ Comunicação entre containers funcionando</p>
       </div>
       <div style={{ marginBottom: "20px" }}>
-        <button
-          onClick={addUser}
-          style={{ padding: "10px 20px", fontSize: "16px" }}
-        >
-          ➕ Adicionar Usuário
-        </button>
-        <button
-          onClick={fetchUsers}
-          style={{ padding: "10px 20px", fontSize: "16px", marginLeft: "10px" }}
-        >
+        <button onClick={addUser}>➕ Adicionar Usuário</button>
+        <button onClick={fetchUsers} style={{ marginLeft: "10px" }}>
           🔄 Atualizar Lista
         </button>
       </div>
